@@ -1,0 +1,25 @@
+{
+  "name": "liri",
+  "version": "1.0.0",
+  "description": "node for handling twitter, spotify, and omdb",
+  "main": "keys.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davesrose/liri-node-app.git"
+  },
+  "author": "David Rosenberg",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/davesrose/liri-node-app/issues"
+  },
+  "homepage": "https://github.com/davesrose/liri-node-app#readme",
+  "dependencies": {
+    "moment": "^2.18.1",
+    "node-spotify-api": "^1.0.5",
+    "request": "^2.81.0",
+    "twitter": "^1.7.1"
+  }
+}
