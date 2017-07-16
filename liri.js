@@ -13,24 +13,24 @@ for (var i = 3; i < nodeArgs.length; i++) {
   }
 }
 
-var doWhat = false;
+var doWhat = false; //creating bolean variable for logging do-what-it-says method or the others
 
 //creating switch for each action argument
 switch (action) {
   case "my-tweets":
-    tweets(doWhat);
+    tweets(doWhat); //pass doWhat bolean
     break;
 
   case "spotify-this-song":
-    spotify(value, doWhat); //pass value from arguments
+    spotify(value, doWhat); //pass value from arguments, as well as doWhat bolean
     break;
 
   case "movie-this":
-    movie(value, doWhat); //pass value from arguments
+    movie(value, doWhat); //pass value from arguments, as well as doWhat bolean
     break;
 
   case "do-what-it-says":
-    random(doWhat);
+    random(doWhat); //pass doWhat bolean
     break;
   //validation for person trying a different action
   default:
@@ -39,7 +39,7 @@ switch (action) {
 
 //twitter function
 function tweets(doWhat) {
-	var fs = require("fs");
+	var fs = require("fs"); //require fs for writting to log.txt
 	var Twitter = require('twitter'); //require twitter package
 	var keys = require("./keys.js"); //require keys.js to read tokens
 	var moment = require("moment"); //require moment package to get correct timestamp formatting
@@ -52,18 +52,18 @@ function tweets(doWhat) {
 	// 'search/tweets'
 	var params = {screen_name: 'davesrose16'}; //use my username
 	client.get('statuses/user_timeline', params, function(error, tweets, response) { //get tweets from davesrose16
-	  if (!error) {
+	  if (!error) { //if no error
 	  	console.log(""); //first console log username and divider
 	  	console.log("Tweets for davesrose16");
 	  	console.log("-----------------------");
-		var stream = fs.createWriteStream("log.txt",{'flags': 'a'});
-		stream.once('open', function(fd) {
-			if (doWhat === true) {
+		var stream = fs.createWriteStream("log.txt",{'flags': 'a'}); //start createWriteStream to log to log.txt
+		stream.once('open', function(fd) { //have stream function start 
+			if (doWhat === true) { //if doWhat bolean is true, it's coming from do-what-it-says...set doWhat back to false
 				doWhat = false;
 			} else {
-				stream.write("\n\n$ node liri.js my-tweets\n");
+				stream.write("\n\n$ node liri.js my-tweets\n"); //else it's my-tweets and gets written to log.txt
 			}
-			stream.write("\nTweets for davesrose16\n-----------------------");
+			stream.write("\nTweets for davesrose16\n-----------------------"); //write my screen name (davesrose16)
 	  	tweets.length <= 20; //set tweets length to latest 20
 	  	for (var z = 0; z < tweets.length; z++) { //creating loop to display each tweet
 	  		var timeStamp = moment(tweets[z].created_at, "ddd mmm HH:mm:ss Z yyyy").format("MM/DD/YYYY") //getting month, day and year from moment: can't get it to recognize twitter's hour format from this
@@ -73,12 +73,12 @@ function tweets(doWhat) {
 	  		console.log(timeStamp+" "+hourStamp+": '"+tweets[z].text+"'"); //display time and tweet text
 	  		console.log("");
 
-				stream.write("\n"+timeStamp+" "+hourStamp+": '"+tweets[z].text+"'\n");
+				stream.write("\n"+timeStamp+" "+hourStamp+": '"+tweets[z].text+"'\n"); //write each tweet to log.txt
 
 
 		} //end for loop
-				stream.end();
-			});
+				stream.end(); //end stream write
+			}); //end createWriteStream
 	  } else {
 	  	console.log(error); //if error, display it
 	  }
@@ -87,7 +87,7 @@ function tweets(doWhat) {
 //spotify function
 function spotify(value, doWhat) {
 
-	var fs = require("fs");
+	var fs = require("fs"); //require fs for createWriteStream
 
 	if (doWhat === "") { //if the value that was passed is empty, make keywords be Ace of Base, The Sign
 		doWhat = "The+Sign+Ace+of+Base";
@@ -105,13 +105,13 @@ function spotify(value, doWhat) {
 	    return console.log('Error occurred: ' + err);
 	  }
 
-	var stream = fs.createWriteStream("log.txt",{'flags': 'a'});
-	stream.once('open', function(fd) {
-		if ((value !== "The+Sign+Ace+of+Base") && (doWhat === false)) {
+	var stream = fs.createWriteStream("log.txt",{'flags': 'a'}); //start createWriteStream
+	stream.once('open', function(fd) { //start createWriteStream function
+		if ((value !== "The+Sign+Ace+of+Base") && (doWhat === false)) { //if value isn't the sign, and doWhat is false, log that the command was spotify-this-song with given value
 			stream.write("\n\n$ node liri.js spotify-this-song "+value);
-		} else if ((value !== "The+Sign+Ace+of+Base") && (doWhat === true)) {
+		} else if ((value !== "The+Sign+Ace+of+Base") && (doWhat === true)) {// if doWhat is true, do-what-it-says has been logged.  Return doWhat to false
 			doWhat = false;
-		} else if ((value === "The+Sign+Ace+of+Base") && (doWhat === false)) {
+		} else if ((value === "The+Sign+Ace+of+Base") && (doWhat === false)) { //if value is the sign, and doWhat is false, log that the command was spotify-this-song without a value
 			stream.write("\n\n$ node liri.js spotify-this-song ");
 		}
 		stream.write("\n\n");
@@ -125,16 +125,16 @@ function spotify(value, doWhat) {
 	  	console.log(" Song Url: "+tracks[w].external_urls.spotify) //get and display song url
 	  	console.log(" Album Name: "+tracks[w].album.name) //get and display album name
 	  	console.log("");
-  		stream.write(" Track : "+parseInt(w+1)+" ----------------------\n");
-  		stream.write(" Artist Name: "+tracks[w].artists[0].name+"\n");
-  		stream.write(" Song Name: "+tracks[w].name+"\n");
-  		stream.write(" Song Url: "+tracks[w].external_urls.spotify+"\n");
-		stream.write(" Album Name: "+tracks[w].album.name+"\n");
+  		stream.write(" Track : "+parseInt(w+1)+" ----------------------\n"); //write track number
+  		stream.write(" Artist Name: "+tracks[w].artists[0].name+"\n"); //write artist name
+  		stream.write(" Song Name: "+tracks[w].name+"\n"); //write song name
+  		stream.write(" Song Url: "+tracks[w].external_urls.spotify+"\n"); //write spotify url
+		stream.write(" Album Name: "+tracks[w].album.name+"\n"); //write album name
 		stream.write("\n");
 			
 	  }
-		stream.end();
-	});
+		stream.end(); //end stream write
+	}); //end createWriteStream
 	// console.log(JSON.stringify(data, null, 2)); 
 	}); //end spotify search
 } //end spotify function
@@ -169,20 +169,20 @@ function movie(value, doWhat) {
 
 	    console.log(title+year+imdb+rotten+country+language+plot+actors); //console.log all the variables
 
-		var stream = fs.createWriteStream("log.txt",{'flags': 'a'});
-		stream.once('open', function(fd) {
-			if ((value !== "Mr Nobody") && (doWhat === false)) {
+		var stream = fs.createWriteStream("log.txt",{'flags': 'a'}); //start createWriteStream
+		stream.once('open', function(fd) { //start stream function
+			if ((value !== "Mr Nobody") && (doWhat === false)) { //if the value isn't the default Mr Nobody, and doWhat is false, write that movie-this was typed and include the value typed
 				stream.write("\n\n$ node liri.js movie-this "+value);
-			} else if ((value !== "Mr Nobody") && (doWhat === true)) {
+			} else if ((value !== "Mr Nobody") && (doWhat === true)) { //if doWhat is true, do-what-it-says has been logged, and doWhat is changed back to false
 				doWhat = false;
-			} else if ((value === "Mr Nobody") && (doWhat === false)) {
+			} else if ((value === "Mr Nobody") && (doWhat === false)) { //if value is Mr Nobody, then user hasn't entered a value: log movie-this without a value
 				stream.write("\n\n$ node liri.js movie-this ");
 			}
-			stream.write("\n\n");
-			stream.write(title+year+imdb+rotten+country+language+plot+actors);
+			stream.write("\n\n"); //write next line breaks
+			stream.write(title+year+imdb+rotten+country+language+plot+actors); //write movie detail variables
 			stream.write("");
-			stream.end();
-		});
+			stream.end(); //end stream
+		}); //end createWriteStream
 
 	  } else {
 	  	console.log(error); //console.log if error from request
@@ -191,7 +191,7 @@ function movie(value, doWhat) {
 } //end movie function
 
 function random(doWhat) { //random function for do-what-it-says action
-	doWhat = true;
+	doWhat = true; //set doWhat bolean as true to track when do-what-it-says was called
 	var fs = require("fs"); //reqire fs for reading txt file
 	fs.readFile("random.txt", "utf8", function(error, data) { //read file random.txt
 
@@ -216,10 +216,10 @@ function random(doWhat) { //random function for do-what-it-says action
 	  } else {
 	  	console.log("random.txt isn't formatted correctly") //otherwise, txt file isn't formatted the same as the example
 	  }
-	var stream = fs.createWriteStream("log.txt",{'flags': 'a'});
-	stream.once('open', function(fd) {
-		stream.write("\n\n$ node liri.js do-what-it-says | random.txt is calling: "+method+", with value of: "+value);
-		stream.end();
-	});
+		var stream = fs.createWriteStream("log.txt",{'flags': 'a'}); //start createWriteStream
+		stream.once('open', function(fd) { //start stream function
+			stream.write("\n\n$ node liri.js do-what-it-says | random.txt is calling: "+method+", with value of: "+value); //write that do-what-it-says was called, and log what method and value was written to in random.txt
+			stream.end(); //end this write stream, as the call will be logged with other functions
+		}); //end createWriteStream function
 	}); //end read file
 } //end random function
