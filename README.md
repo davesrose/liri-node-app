@@ -1,4 +1,4 @@
-I have followed instructions to create a .gitignore file to not push the node_modules folder or .DS_Store (though I've researched and found out it's specific to Apple OS: I'm working on a PC).
+I have followed instructions to create a .gitignore file to not push the node_modules folder or .DS_Store (though I've researched and found out it's specific to Apple OS: I'm working on a PC).  Appart from the required node packages, I also installed moment to be able to reformat the time of when a tweet is posted.
 
 I have created a switch to handle the action arguments (my-tweets, spotify-this-song, movie-this, and do-what-it-says).  If the user types something else, they'll be alerted to try another action (it won't be logged to the log.txt though).
 
